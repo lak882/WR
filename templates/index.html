@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block body %}
+<script>
+  // get all the runs
+  function milesSearch(runs) {
+    // get integer input from user
+    let milesInput = parseFloat(document.querySelector("#milesInput").value);
+
+    // only display a run if it's miles are greater than the input
+    for (let run of runs) {
+      let cont = document.querySelector("#" + CSS.escape(run["name"]))
+      if (run['miles'] >= milesInput) {
+        cont.style.display = "";
+      } else {
+        cont.style.display = "none";
+      }
+    }
+  }
+
+  function nameSearch(runs) {
+    // get string input from user
+    let nameInput = document.querySelector("#nameInput").value.toUpperCase();
+    // onyl display a run if the name start with the input
+    for (let run of runs) {
+      let cont = document.querySelector("#" + CSS.escape(run["name"]))
+      if (run['name'].toUpperCase().startsWith(nameInput)) {
+        cont.style.display = "";
+      } else {
+        cont.style.display = "none";
+      }
+    }
+  }
+</script>
+
+<!-- navigation bar -->
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <!-- brand at top left of page -->
+  <a href="#" class="navbar-brand">Williamstown Runner</a>
+  <div class="collapse.show navbar-collapse" id="navbarMenu">
+    <!-- navbar with items positioned to left -->
+    <ul class="navbar-nav mr-auto">
+      <!-- onchange searchbar for length -->
+      <input class="form-control" onchange="milesSearch({{ runs }})" placeholder="Miles" type="number" id="milesInput">
+      <!-- onchange searchbar for name -->
+      <input class="form-control" onchange="nameSearch({{ runs }})" placeholder="Route Name" type="text" id="nameInput">
+    </ul>
+  </div>
+</nav>
+
+<!-- onlcick dropdown for every run -->
+{% for run in runs %}
+<div class="run" id="{{ run['name'] }}" data-expandable="true" aria-expandable="false" >
+  <button class="btn btn-block btn-lg text-left" data-toggle="collapse" data-target="#{{ run['name'] }} Map">
+    <!-- miles and name value -->
+    <a name="miles" value="{{ run['miles'] }}">{{ run['miles'] }} mi</a>
+    <a>|</a>
+    <a name="name" value="{{ run['name'] }}">{{ run['name'] }}</a>
+    <!-- +/- for the dropdown -->
+    <i class="fa fa-plus float-right" style="text-align:center;"></i>
+  </button>
+  <!-- map for each run -->
+  <div class="map collapse" id="{{ run['name'] }} Map">
+    <iframe src="{{ run['map'] }}" height="300" width="300" border=0  allowfullscreen="" loading="lazy"></iframe>
+  </div>
+</div>
+{% endfor %}
+
+<script>
+  // change + icon to a - icon, if the user clicks on it
+  $('.btn').click(function() {
+      $(this).find('i').toggleClass("fa fa-plus fa fa-minus");
+  });
+</script>
+
+{% endblock %}
