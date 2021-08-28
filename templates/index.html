@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
+<!-- searchbar scripts -->
 <script>
   // get all the runs
   function milesSearch(runs) {
@@ -9,10 +10,16 @@
     // only display a run if it's miles are greater than the input
     for (let run of runs) {
       let cont = document.querySelector("#" + CSS.escape(run["name"]))
-      if (run['miles'] >= milesInput) {
-        cont.style.display = "";
+      // valid input > 0
+      if (milesInput > 0) {
+        if (run['miles'] >= milesInput) {
+          cont.style.display = "";
+        } else {
+          cont.style.display = "none";
+        }
+      // invalid input <0 or blank
       } else {
-        cont.style.display = "none";
+        cont.style.display = "";
       }
     }
   }
@@ -40,7 +47,7 @@
     <!-- navbar with items positioned to left -->
     <ul class="navbar-nav mr-auto">
       <!-- onchange searchbar for length -->
-      <input class="form-control" onchange="milesSearch({{ runs }})" placeholder="Miles" type="number" id="milesInput">
+      <input class="form-control" onchange="milesSearch({{ runs }})" placeholder="Miles" type="number" min="0" id="milesInput">
       <!-- onchange searchbar for name -->
       <input class="form-control" onchange="nameSearch({{ runs }})" placeholder="Route Name" type="text" id="nameInput">
     </ul>
@@ -60,11 +67,13 @@
   </button>
   <!-- map for each run -->
   <div class="map collapse" id="{{ run['name'] }} Map">
-    <iframe src="{{ run['map'] }}" height="300" width="300" border=0  allowfullscreen="" loading="lazy"></iframe>
+    <!-- map, where the width adjusts with change in the window -->
+    <iframe src="{{ run['map'] }}" height="300" border=0  width="98%" allowfullscreen="" loading="lazy"></iframe>
   </div>
 </div>
 {% endfor %}
 
+<!-- button script -->
 <script>
   // change + icon to a - icon, if the user clicks on it
   $('.btn').click(function() {
