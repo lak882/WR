@@ -1,0 +1,5 @@
+myprojectenv/
+WR.sock
+WR.ini
+wsgi.py
+__pycache__/
