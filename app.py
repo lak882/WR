@@ -24,3 +24,6 @@ with open(path, 'r') as file:
 def index():
     """Let user search different runs"""
     return render_template("index.html", runs=RUNS)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
