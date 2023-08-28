@@ -1,1 +1,1 @@
-# Click here to visit Williamstown Runner! (https://williamsrun.lak3.me/)
+[Click here to visit Williamstown Runner!](https://williamsrun.lak3.me/)
